@@ -1,6 +1,6 @@
 <template>
   <table class="table">
-    <tr>
+    <tr class="tr">
       <th scope="col" class="table-name">Имя</th>
       <th scope="col" class="table-phone">Телефон</th>
     </tr>
@@ -31,6 +31,10 @@ export default {
 .table {
   border: 1px solid;
   border-collapse: collapse;
-
+}
+.tr,
+.table-name,
+.table-phone {
+  border: 1px solid;
 }
 </style>

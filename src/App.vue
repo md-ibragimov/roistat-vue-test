@@ -24,7 +24,9 @@ export default {
   components: { TableVue, UserFormVue },
   data() {
     return {
-      users: [],
+      users: localStorage.getItem("users")
+        ? JSON.parse(localStorage.getItem("users"))
+        : [],
       allUsers: [],
     };
   },
@@ -59,7 +61,24 @@ export default {
         });
       }
     },
-    sortUsers() {},
+    sortUsers() {
+      this.users.map((el) => {
+        return el.children.sort((a, b) =>
+          a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+        );
+      });
+      this.users.sort((a, b) =>
+        a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+      );
+    },
+  },
+  watch: {
+    users: {
+      handler(value) {
+        localStorage.setItem("users", JSON.stringify(value));
+      },
+      deep: true,
+    },
   },
 };
 </script>
