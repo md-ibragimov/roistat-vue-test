@@ -105,7 +105,7 @@ export default {
   height: 100vh;
   display: flex;
   justify-content: space-between;
-  gap: 100px;
+  gap: 15px;
 }
 
 .button {
