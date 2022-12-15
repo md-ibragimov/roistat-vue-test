@@ -1,14 +1,23 @@
 <template>
   <div class="container">
     <div class="table-container">
-      <button @click="sortUsers" id="add-button" class="button">
+      <button @click="handleForm(true)" id="add-button" class="button">
         Добавить
       </button>
-      <TableVue :users="users" />
+      <button
+        @click="localStorageClean"
+        id="local-storage-clean"
+        class="button"
+      >
+        Очистить локальное хранилище
+      </button>
+      <TableVue @sortUsers="sortUsers" :users="users" />
     </div>
     <div class="form-container">
       <UserFormVue
         @addContact="addContact"
+        @handleForm="handleForm"
+        :form="form"
         :allUsers="allUsers"
         :users="users"
       />
@@ -24,6 +33,7 @@ export default {
   components: { TableVue, UserFormVue },
   data() {
     return {
+      form: false,
       users: localStorage.getItem("users")
         ? JSON.parse(localStorage.getItem("users"))
         : [],
@@ -31,6 +41,9 @@ export default {
     };
   },
   methods: {
+    handleForm(value) {
+      this.form = value;
+    },
     addContact(value) {
       this.allUsers.push(value);
       if (!value.boss.id) {
@@ -60,6 +73,9 @@ export default {
           return el;
         });
       }
+    },
+    localStorageClean() {
+      this.users = [];
     },
     sortUsers() {
       this.users.map((el) => {
@@ -110,7 +126,12 @@ export default {
   #add-button {
     flex-grow: 0;
     flex-shrink: 0;
-    margin: 50px 0 50px auto;
+    margin: 50px 0 35px auto;
+  }
+  #local-storage-clean {
+    margin: 0 0 15px auto;
+    flex-grow: 0;
+    flex-shrink: 0;
   }
 }
 

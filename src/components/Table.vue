@@ -1,7 +1,14 @@
 <template>
   <table class="table">
     <tr class="tr">
-      <th scope="col" class="table-name">Имя</th>
+      <th
+        style="cursor: pointer"
+        @click="$emit('sortUsers')"
+        scope="col"
+        class="table-name"
+      >
+        Имя
+      </th>
       <th scope="col" class="table-phone">Телефон</th>
     </tr>
     <TableItemVue

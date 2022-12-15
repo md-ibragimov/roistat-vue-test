@@ -1,6 +1,6 @@
 <template>
-  <div class="user-form-container">
-    <div class="use-form-close">x</div>
+  <div v-if="form" class="user-form-container">
+    <div @click="$emit('handleForm', false)" class="use-form-close">x</div>
     <h3 class="user-form-title">Добавление пользователя</h3>
     <form @submit.prevent @submit="handleForm" class="user-form">
       <label class="user-form-label"
@@ -76,6 +76,25 @@ export default {
       };
     },
   },
+  watch: {
+    form: {
+      handler(value) {
+        if (!value) {
+          this.contact = {
+            id: v4(),
+            name: null,
+            phone: null,
+            boss: {
+              id: null,
+              name: null,
+              phone: null,
+            },
+          };
+        }
+      },
+      deep: true,
+    },
+  },
   props: {
     allUsers: {
       type: Array,
@@ -83,8 +102,12 @@ export default {
     },
     users: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
+    form: {
+      type: Boolean,
+      required: true,
+    },
   },
 };
 </script>
