@@ -33,14 +33,31 @@ export default {
   components: { TableVue, UserFormVue },
   data() {
     return {
-      form: false,
+      form: true,
       users: localStorage.getItem("users")
         ? JSON.parse(localStorage.getItem("users"))
         : [],
-      allUsers: [],
+      allUsers: localStorage.getItem("allUsers")
+        ? JSON.parse(localStorage.getItem("allUsers"))
+        : [],
     };
   },
   methods: {
+    search(data, value, fatherId) {
+      data.forEach((element, id) => {
+        if (element.id === fatherId) {
+          data[id].children.push({
+            id: value.id,
+            name: value.name,
+            phone: value.phone,
+            children: [],
+          });
+        } else if (element.children.length) {
+          data.children = this.search(element.children, value, fatherId);
+        }
+      });
+      return data;
+    },
     handleForm(value) {
       this.form = value;
     },
@@ -48,34 +65,16 @@ export default {
       this.allUsers.push(value);
       if (!value.boss.id) {
         this.users.push({
-          id: value.id,
           name: value.name,
+          id: value.id,
           phone: value.phone,
-          isChild: false,
           children: [],
         });
-      } else {
-        this.users = this.users.map((el) => {
-          if (el.id === value.boss.id) {
-            return {
-              ...el,
-              children: [
-                ...el.children,
-                {
-                  name: value.name,
-                  phone: value.phone,
-                  id: value.id,
-                  isChild: true,
-                },
-              ],
-            };
-          }
-          return el;
-        });
-      }
+      } else this.users = this.search(this.users, value, value.boss.id);
     },
     localStorageClean() {
       this.users = [];
+      this.allUsers = [];
     },
     sortUsers() {
       this.users.map((el) => {
@@ -92,6 +91,12 @@ export default {
     users: {
       handler(value) {
         localStorage.setItem("users", JSON.stringify(value));
+      },
+      deep: true,
+    },
+    allUsers: {
+      handler(value) {
+        localStorage.setItem("allUsers", JSON.stringify(value));
       },
       deep: true,
     },

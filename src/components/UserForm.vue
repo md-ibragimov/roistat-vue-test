@@ -24,7 +24,7 @@
           @input="handleSelect"
           class="user-form-item"
         >
-          <option v-for="user in users" :value="user.id" :key="user.id">
+          <option v-for="user in allUsers" :value="user.id" :key="user.id">
             {{ user.name }}
           </option>
         </select>
@@ -34,7 +34,7 @@
   </div>
 </template>
 
-<script>
+<script lang="js">
 import { v4 } from "uuid";
 
 export default {

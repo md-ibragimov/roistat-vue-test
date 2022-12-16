@@ -1,32 +1,45 @@
 <template>
-  <tr class="tr" v-if="!user.isChild && !user.children.length">
-    <td class="td">{{ user.name }}</td>
-    <td class="td">{{ user.phone }}</td>
-  </tr>
-  <template v-else-if="!user.isChild && user.children.length">
-    <tr class="tr">
-      <td class="td">+ {{ user.name }}</td>
-      <td class="td">{{ user.phone }}</td>
-    </tr>
-    <tr :key="child.id" v-for="child in user.children">
-      <td class="td-child">
-        <div class="td-child-div">+ {{ child.name }}</div>
-      </td>
-      <td class="td">{{ child.phone }}</td>
-    </tr>
+  <template :key="user.id" v-for="user in users">
+    <div class="contact-wrapper" v-if="!user.children.length">
+      <div :style="{ width: `${widthStyle}%` }" class="user-name">
+        {{ children ? `+ ${user.name}` : user.name }}
+      </div>
+      <div v-if="!user.children.length" class="user-phone">
+        {{ user.phone }}
+      </div>
+    </div>
+    <template v-else>
+      <div class="contact-wrapper">
+        <div :style="{ width: `${widthStyle}%` }" class="user-name">
+          + {{ user.name }}
+        </div>
+        <div class="user-phone">
+          {{ user.phone }}
+        </div>
+      </div>
+      <TableItem
+        :widthStyle="widthStyle - 2"
+        :children="true"
+        :users="user.children"
+      />
+    </template>
   </template>
 </template>
 
 <script>
 export default {
-  methods: {},
+  name: "TableItem",
   props: {
-    user: {
-      type: Object,
-      required: true,
-    },
     users: {
       type: Array,
+      required: true,
+    },
+    children: {
+      type: Boolean,
+      required: false,
+    },
+    widthStyle: {
+      type: String,
       required: true,
     },
   },
@@ -34,19 +47,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.td {
-  border: 1px solid;
-  text-align: center;
-}
-.td-child {
-  border: none !important;
-}
-.td-child-div {
-  width: 90%;
+.contact-wrapper {
+  width: 100%;
+  display: flex;
   margin-left: auto;
-  border-left: 1px solid;
-  text-align: center;
-  color: #fff;
-  background-color: #000;
+  .user-name,
+  .user-phone {
+    display: block;
+    height: auto;
+    border: 1px solid;
+    padding: 5px 10px;
+    width: 50%;
+  }
+  .user-name {
+    margin-left: auto;
+    align-items: flex-end;
+  }
+  .user-name-children {
+    width: 45%;
+  }
 }
 </style>
