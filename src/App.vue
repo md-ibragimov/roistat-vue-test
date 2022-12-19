@@ -28,6 +28,7 @@
 <script>
 import TableVue from "./components/Table.vue";
 import UserFormVue from "./components/UserForm.vue";
+import deepSort from "deep-sort";
 
 export default {
   components: { TableVue, UserFormVue },
@@ -77,14 +78,16 @@ export default {
       this.allUsers = [];
     },
     sortUsers() {
-      this.users.map((el) => {
-        return el.children.sort((a, b) =>
-          a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
-        );
+      this.users = this.sortUsersDeep(deepSort(this.users, "name"));
+    },
+    sortUsersDeep(array) {
+      array.forEach((el, index) => {
+        if (el.children.length) {
+          array[index].children = deepSort(el.children, "name");
+          array[index].children = this.sortUsersDeep(el.children);
+        }
       });
-      this.users.sort((a, b) =>
-        a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
-      );
+      return array;
     },
   },
   watch: {

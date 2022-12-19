@@ -39,7 +39,7 @@ export default {
       required: false,
     },
     widthStyle: {
-      type: String,
+      type: Number,
       required: true,
     },
   },

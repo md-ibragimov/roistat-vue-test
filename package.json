@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "deep-sort": "^1.0.4",
     "normalize.css": "^8.0.1",
     "sass": "^1.56.2",
     "uuid": "^9.0.0",
